@@ -5,14 +5,14 @@ const sonarScans = Input.scans.split('\n').map(Number);
 
 const problem1 = (input) => {
     let depthIncreases = 0;
+    console.log(input)
     for(let i=1; i < input.length; i++){
-        console.log(i);
-        console.log(input)
         if(input[i] > input[i-1]){
             depthIncreases = depthIncreases + 1;
+            console.log(`${i}: ${input[i]} > ${input[i-1]}`)
         }
-        return depthIncreases;
     }
+    return depthIncreases;
 }
 
 const solution1 = problem1(sonarScans);
