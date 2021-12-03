@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Merry.Christmas</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="01\" />
+  </ItemGroup>
+
+</Project>
