@@ -2,7 +2,6 @@ const Input = require('./input')
 
 const sonarScans = Input.scans.split('\n').map(Number);
 
-
 const problem1 = (input) => {
     let depthIncreases = 0;
     console.log(input)
