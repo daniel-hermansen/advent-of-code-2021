@@ -6,7 +6,7 @@ namespace Merry.Christmas
 {
     public class Day3 : PuzzleSolver
     {
-        protected override void Run(string[] inputLines)
+        protected override string Solve(string[] inputLines)
         {
             var bitmap = new Dictionary<int, (int falseCount, int trueCount)>();
             foreach (var line in inputLines)
@@ -43,10 +43,7 @@ namespace Merry.Christmas
                     Console.Write("0");
                 }
             }
-            Console.WriteLine();
-            Console.WriteLine(gamma);
-            Console.WriteLine(epsilon);
-            Console.WriteLine($"Final answer: {gamma*epsilon}");
+            return $"{gamma*epsilon}";
         }
     }
 }

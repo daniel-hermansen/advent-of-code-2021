@@ -6,8 +6,4 @@
     <RootNamespace>Merry.Christmas</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="01\" />
-  </ItemGroup>
-
 </Project>

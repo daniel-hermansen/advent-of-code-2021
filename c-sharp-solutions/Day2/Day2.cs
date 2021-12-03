@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +5,7 @@ namespace Merry.Christmas
 {
     public class Day2 : PuzzleSolver
     {
-        protected override void Run(string[] inputLines)
+        protected override string Solve(string[] inputLines)
         {
             IEnumerable<(string direction, int value)> input = inputLines.Select(s =>
                                             {
@@ -30,13 +29,14 @@ namespace Merry.Christmas
                         break;
                 }
             }
-            Console.WriteLine(horizontal*depth);
+
+            return (horizontal * depth).ToString();
         }
     }
 
     public class Day2Part2 : PuzzleSolver
     {
-        protected override void Run(string[] inputLines)
+        protected override string Solve(string[] inputLines)
         {
             IEnumerable<(string direction, int x)> input = inputLines.Select(s =>
                                             {
@@ -63,7 +63,8 @@ namespace Merry.Christmas
                         break;
                 }
             }
-            Console.WriteLine(horizontal*depth);
+
+            return (horizontal * depth).ToString();
         }
     }
 }

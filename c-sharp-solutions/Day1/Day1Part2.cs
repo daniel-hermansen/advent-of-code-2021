@@ -5,7 +5,7 @@ namespace Merry.Christmas
 {
     public class Day1Part2 : PuzzleSolver
     {
-        protected override void Run(string[] inputLines)
+        protected override string Solve(string[] inputLines)
         {
             var depths = inputLines.Select(s => Convert.ToInt32(s)).ToArray();
             var depthIncreases = 0;
@@ -13,7 +13,8 @@ namespace Merry.Christmas
             {
                 if(depths[i] > depths[i-3]) depthIncreases++;
             }
-            Console.WriteLine(depthIncreases);
+
+            return depthIncreases.ToString();
         }
     }
 }
