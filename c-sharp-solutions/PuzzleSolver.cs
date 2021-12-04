@@ -7,7 +7,7 @@ namespace Merry.Christmas
     /// <summary> Shared base class for all puzzle solutions </summary>
     public abstract class PuzzleSolver
     {
-        public virtual double Solve(string inputFilepath)
+        public virtual double Solve(string inputFilepath, bool silent)
         {
             if (!File.Exists(inputFilepath))
             {
@@ -21,10 +21,15 @@ namespace Merry.Christmas
             var timer = Stopwatch.StartNew();
             var result = Solve(inputLines);
             timer.Stop();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(result);
-            Console.ResetColor();
-            Console.WriteLine($"Elapsed: {timer.Elapsed.TotalMilliseconds:N3} ms");
+            if (!silent)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(result);
+                Console.ResetColor();
+                Console.WriteLine($"Elapsed:\t{timer.Elapsed.TotalMilliseconds:N3} ms");
+                Console.WriteLine();
+            }
+
             return timer.Elapsed.TotalMilliseconds;
         }
 
