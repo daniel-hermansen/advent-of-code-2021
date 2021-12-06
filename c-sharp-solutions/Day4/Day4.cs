@@ -8,37 +8,41 @@ namespace Merry.Christmas.Day4
         protected override string Solve(string[] inputLines)
         {
             var drawPile = inputLines[0].Split(',').Select(int.Parse);
-            var boards = inputLines.Skip(2).Where(s => !string.IsNullOrEmpty(s))
+            var boards = inputLines.Skip(2).Where(s => !string.IsNullOrWhiteSpace(s))
                 .Select((s, i) => (s, i))
                 .GroupBy(l => l.i / 5)
-                .Select(g => new BingoBoard(g.Select(x => x.s).ToArray())).ToList();
-            
+                .Select(g => new BingoBoard(g.Select(x => x.s).ToArray())).ToList();            
+            return Play(drawPile, boards);
+        }
+
+        protected virtual string Play(IEnumerable<int> drawPile, List<BingoBoard> boards)
+        {
             foreach (var number in drawPile)
                 foreach (var board in boards)
                     if (board.Play(number, out var score))
                         return score.ToString();
             return null;
         }
-        
-        private record Cell(int Value, int X, int Y)
-        {
-            private bool Marked { get; set; }
 
-            public int GetBingoScore(BingoBoard board)
+        public record Cell(int Value, int X, int Y)
+        {
+            public bool Marked { get; private set; }
+
+            public int Play(BingoBoard board)
             {
                 Marked = true;
-                if (board.Board[Y].All(c => c.Marked))
-                    return board.Cells.Values.Where(v => !v.Marked).Sum(c => c.Value) * Value;
-                if (board.Board.All(r => r[X].Marked))
+                if (board.Board[Y].All(c => c.Marked) || board.Board.All(r => r[X].Marked))
                     return board.Cells.Values.Where(v => !v.Marked).Sum(c => c.Value) * Value;
                 return -1;
             }
         }
 
-        private class BingoBoard
+        public class BingoBoard
         {
             public Cell[][] Board { get; }
             public Dictionary<int, Cell> Cells { get; } = new();
+            public int? Score { get; private set; }
+            public bool HasBingo => Score > 0;
             
             public BingoBoard(IEnumerable<string> board)
             {
@@ -55,7 +59,7 @@ namespace Merry.Christmas.Day4
             {
                 if (Cells.ContainsKey(number))
                 {
-                    score = Cells[number].GetBingoScore(this);
+                    Score = score = Cells[number].Play(this);
                     if (score > 0) return true;
                 }
                 score = -1;
