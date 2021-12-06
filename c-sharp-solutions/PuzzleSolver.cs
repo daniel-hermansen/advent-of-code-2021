@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Merry.Christmas
 {
@@ -34,5 +35,13 @@ namespace Merry.Christmas
         }
 
         protected abstract string Solve(string[] inputLines);
+    }
+
+    public static class PuzzleHelpers
+    {
+        public static int[] ToIntArray(this string[] input)
+        {
+            return input.Select(int.Parse).ToArray();
+        }
     }
 }
