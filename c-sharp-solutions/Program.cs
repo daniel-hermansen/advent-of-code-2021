@@ -39,7 +39,7 @@ namespace Merry.Christmas
                 Console.WriteLine("Usage:\n\tAoC2021 <puzzleName | puzzleNumber> [options]");
                 Console.WriteLine("Options:\n\t-r\t\t\tAverage 100 iterations");
                 Console.WriteLine(
-                    "Examples:\n\tAoC2021 1\t\tinvokes Day1.Solve()\n\tAoC2021 Day1\t\tinvokes Day1.Solve()\n\tAoC2021 Day1.2\t\tinvokes Day1Part2.Solve()");
+                    "Examples:\n\tAoC2021 1\t\tinvokes Day1.Solve()\n\tAoC2021 Day1\t\tinvokes Day1.Solve()\n\tAoC2021 1.2\t\tinvokes Day1Part2.Solve()");
                 Console.WriteLine("\tAoc2021 1*\t\tinvokes all Day1 solutions found in assembly");
                 Console.WriteLine("\tAoc2021 1 -r\t\tinvokes Day1.Solve() 100 times and averages elapsed time");
                 Console.WriteLine();

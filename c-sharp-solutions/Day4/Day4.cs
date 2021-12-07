@@ -42,7 +42,7 @@ namespace Merry.Christmas.Day4
             public Cell[][] Board { get; }
             public Dictionary<int, Cell> Cells { get; } = new();
             public int? Score { get; private set; }
-            public bool HasBingo => Score > 0;
+            public bool HasBingo => Score >= 0;
             
             public BingoBoard(IEnumerable<string> board)
             {
@@ -60,7 +60,7 @@ namespace Merry.Christmas.Day4
                 if (Cells.ContainsKey(number))
                 {
                     Score = score = Cells[number].Play(this);
-                    if (score > 0) return true;
+                    if (score >= 0) return true;
                 }
                 score = -1;
                 return false;
