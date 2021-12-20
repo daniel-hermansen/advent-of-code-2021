@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Merry.Christmas
 {
@@ -32,19 +33,30 @@ namespace Merry.Christmas
             }
         }
 
+        private static string InputFileName { get; set; } = "input.txt";
+
         private static bool ProcessArgs(IList<string> args)
         {
             if (args.Count == 0 || args.Contains("-help") || args.Contains("--help"))
             {
                 Console.WriteLine("Usage:\n\tAoC2021 <puzzleName | puzzleNumber> [options]");
-                Console.WriteLine("Options:\n\t-r\t\t\tAverage 100 iterations");
+                Console.WriteLine("Options:\n\t-r\t\t\tAverage 100 iterations\n\t-i\t\t\tSet the input filename");
                 Console.WriteLine(
                     "Examples:\n\tAoC2021 1\t\tinvokes Day1.Solve()\n\tAoC2021 Day1\t\tinvokes Day1.Solve()\n\tAoC2021 1.2\t\tinvokes Day1Part2.Solve()");
-                Console.WriteLine("\tAoc2021 1*\t\tinvokes all Day1 solutions found in assembly");
-                Console.WriteLine("\tAoc2021 1 -r\t\tinvokes Day1.Solve() 100 times and averages elapsed time");
+                Console.WriteLine("\tAoC2021 1*\t\tinvokes all Day1 solutions found in assembly");
+                Console.WriteLine("\tAoC2021 1 -r\t\tinvokes Day1.Solve() 100 times and averages elapsed time");
+                Console.WriteLine("\tAoC2021 1 -i test.txt\tinvokes Day1.Solve() with the 'test.txt' input file");
                 Console.WriteLine();
                 return true;
             }
+
+            if (!InitializeInputFilename(args))
+            {
+                // Failed to initialize filename. Show help text.
+                ProcessArgs(Array.Empty<string>());
+                return true;
+            }
+
 
             if (args[0].ToLowerInvariant() == "q")
             {
@@ -59,6 +71,58 @@ namespace Merry.Christmas
             else
             {
                 RunPuzzleSolvers(puzzleName, false);
+            }
+
+            return true;
+        }
+
+        private static bool InitializeInputFilename(IList<string> args)
+        {
+            var inputIndex = args.IndexOf("-i");
+            if (inputIndex > 0)
+            {
+                if (args.Count <= inputIndex + 1)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Input filename not supplied");
+                    Console.ResetColor();
+                    return false;
+                }
+
+                var filename = args[inputIndex + 1];
+                char? quoteChar = null;
+                if (filename.StartsWith("'"))
+                {
+                    quoteChar = '\'';
+                }
+                else if (filename.StartsWith('"'))
+                {
+                    quoteChar = '"';
+                }
+
+                if (quoteChar != null)
+                {
+                    var sb = new StringBuilder();
+                    foreach (var value in args.Skip(inputIndex + 1))
+                    {
+                        if (value.EndsWith(quoteChar.Value))
+                        {
+                            sb.Append(value.TrimEnd(quoteChar.Value));
+                        }
+                        else
+                        {
+                            sb.Append(value + " ");
+                        }
+                    }
+
+                    filename = sb.ToString().TrimStart(quoteChar.Value);
+                }
+
+                InputFileName = filename;
+            }
+            else
+            {
+                InputFileName = "input.txt";
             }
 
             return true;
@@ -143,7 +207,6 @@ namespace Merry.Christmas
                 }
                 catch (Exception e)
                 {
-                    if (solverTypes.Count == 1) throw;
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(e);
                     Console.ResetColor();
@@ -195,10 +258,16 @@ namespace Merry.Christmas
             var currentPath = AppDomain.CurrentDomain.BaseDirectory;
             var solutionsDirectory = currentPath.Split("bin\\")[0];
 
+            var inputFilename = InputFileName;
             // Assume that the input.txt file exists in the directory matching the root puzzle name (i.e. Day1).
             // Remove any suffix (i.e. Part2 or -2 or .2) if it exists, because solvers for the same day use the same input
-            var inputFilepath = Path.Combine(solutionsDirectory,
-                puzzleName.Split("Part")[0].Split("-")[0].Split(".")[0], "input.txt");
+            var puzzleDirectory =
+                Path.Combine(solutionsDirectory, puzzleName.Split("Part")[0].Split("-")[0].Split(".")[0]);
+            var inputFilepath = Path.Combine(puzzleDirectory, inputFilename);
+            if (!File.Exists(inputFilepath))
+            {
+                inputFilepath = Path.Combine(puzzleDirectory, "test.txt");
+            }
             if (!silent)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
